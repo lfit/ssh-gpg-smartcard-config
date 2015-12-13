@@ -95,11 +95,11 @@ If running gnome, this problem may be solved by running the following to disable
 Next, place the following in ``~/.bashrc`` to ensure gpg-agent starts with ``--enable-ssh-support``
 ::
 
-    if [ ! -f /tmp/gpg-agent.env ]; then
+    if [ ! -f /run/user/($id -u)/gpg-agent.env ]; then
         killall gpg-agent;
-        eval $(gpg-agent --daemon --enable-ssh-support > /tmp/gpg-agent.env);
+        eval $(gpg-agent --daemon --enable-ssh-support > /run/user/($id -u)/gpg-agent.env);
     fi
-    . /tmp/gpg-agent.env
+    . /run/user/($id -u)/gpg-agent.env
 
 Now go to next step (Reload GNOME-Shell) :)
 
