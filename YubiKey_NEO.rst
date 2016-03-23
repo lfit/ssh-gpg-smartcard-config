@@ -1,11 +1,11 @@
-ssh-gpg-smartcard-config for yubikey-neo
-========================================
+ssh-gpg-smartcard-config for yubikeys
+=====================================
 
-This document covers the procedure for configurating a YubiKey as a GPG smartcard for SSH authentication, it also covers setting the correct serial number on the card. The benefit is a good model for `two-factor authentication <http://en.wikipedia.org/wiki/Two-factor_authentication>`_, something you have and something you know. In this example, there is a token and a passphrase.
+This document covers the procedure for configuring a YubiKey as a GPG smartcard for SSH authentication, it also covers setting the correct serial number on the card. The benefit is a good model for `two-factor authentication <http://en.wikipedia.org/wiki/Two-factor_authentication>`_, something you have and something you know. In this example, there is a token and a passphrase.
 
-The `YubiKey Neo <https://www.yubico.com/products/yubikey-hardware/yubikey-neo>`_ is used here. Other yubikeys will not work, as they do not support the applet functionality.
+While this document is written for the `YubiKey NEO <https://www.yubico.com/products/yubikey-hardware/yubikey-neo>`_, these instructions work for `Yubikey4 <https://www.yubico.com/products/yubikey-hardware/yubikey4/>`_ as well (either standard or Nano sizes). Unless you plan to use the NFC functionality of the Yubikey NEO, it is recommended that you get Yubikey 4, which supports 4096-bit PGP keys. The NEO is limited to 2048-bit keys.
 
-Examples below are using a Fedora 22 x86_64 and Ubuntu 15.04 x86_64 fresh install. There are other tutorials for other operating systems and keys available online. See the CREDITS section below for alternate tutorials, examples, etc.
+Examples below are using a Fedora 23 x86_64 and Ubuntu 15.04 x86_64 fresh install. There are other tutorials for other operating systems and keys available online. See the CREDITS section below for alternate tutorials, examples, etc.
 
 Configuring Authentication with GNOME-Shell
 -------------------------------------------
@@ -145,55 +145,6 @@ Reload GNOME-Shell So that the gpg-agent stuff above takes effect.
 
 Rebooting the machine works the best.
 
-
-Get gpshell etc to fix serial number*
---------------------------------
-#\* This section not relevant to a consumer edition NEO, it can still be relevant to a developer edition NEO. This section has not been tested with Ubuntu.
-
-Install gpshell binary and libs from tykeal's repo::
-
-  $ sudo yum install http://copr-be.cloud.fedoraproject.org/results/tykeal/GlobalPlatform/fedora-19-x86_64/tykeal-GlobalPlatform-release-0.0.1-1.fc19/tykeal-GlobalPlatform-release-0.0.1-1.fc19.x86_64.rpm
-
-  sudo yum install gpshell gppcscconnectionplugin
-
-
-Create a gpinstall file::
-
-  cat <<EOF >> gpinstall.txt
-  mode_211
-  enable_trace
-  establish_context
-  card_connect
-  select -AID a000000003000000
-  open_sc -security 1 -keyind 0 -keyver 0 -mac_key 404142434445464748494a4b4c4d4e4f -enc_key 404142434445464748494a4b4c4d4e4f
-  delete -AID D2760001240102000000000000010000
-  delete -AID D27600012401
-  install -file openpgpcard.cap -instParam 00 -priv 00
-  card_disconnect
-  release_context
-  EOF
-
-
-Get the cap file and place it where gpinstall expects to find it::
-
-  wget -O openpgpcard.cap https://github.com/Yubico/yubico.github.com/raw/master/ykneo-openpgp/releases/ykneo-openpgp-1.0.5.cap
-
-
-
-put the correct serial number into gpinstall.txt:: 
-
-  if ykneomgr -s; then
-    sed -i "s/^install.*/& -instAID D276000124010200006"$(printf %08d "$(ykneomgr -s)")"0000/" gpinstall.txt
-  fi
-
-
-Flash the card\*::
-
-  gpshell gpinstall.txt
-
-#\* WARNING This erases all existing keys on the smartcard
-
-#\* End section not relevant to a consumer edition NEO
 
 Setting PINs
 ------------
