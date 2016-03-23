@@ -20,10 +20,6 @@ Certain software must be installed, including ``gnupg2`` (which is probably alre
 Configure GNOME-Shell to use gpg-agent
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Turn off ssh-agent inside gnome-keyring-daemon::
-
-  $ gconftool-2 --type bool --set /apps/gnome-keyring/daemon-components/ssh false
-
 Configure gpg to use agent (only for smartcard)::
 
   $ gpg --list-keys | head -n 1

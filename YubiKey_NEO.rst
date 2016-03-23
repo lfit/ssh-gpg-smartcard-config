@@ -37,12 +37,6 @@ If you have a dev key, Reboot your yubikey (remove and reinsert) so that ykneomg
 Configure GNOME-Shell to use gpg-agent and disable ssh-agent
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Turn off ssh-agent inside gnome-keyring-daemon::
-
-  if [[ $(gconftool-2 --get /apps/gnome-keyring/daemon-components/ssh) != "false" ]]; then
-    gconftool-2 --type bool --set /apps/gnome-keyring/daemon-components/ssh false
-  fi
-
 Configure GPG to use its agent (only for smartcard)::
 
   $ echo "use-agent" >> ~/.gnupg/gpg.conf
@@ -86,11 +80,15 @@ Note: We could have used the Xsession gpg-agent and trashed the upstart one, but
 
 Intercept gnome-keyring-daemon and put gpg-agent in place for ssh authentication (Fedora)
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-If running gnome, this problem may be solved by running the following to disable gnome-keyring from autostarting its broken gpg-agent and ssh-agent implementation::
+If running gnome, you have to prevent gnome-keyring from autostarting its ssh-agent implementation, because we will use GPG's instead:
 
-  mv /etc/xdg/autostart/gnome-keyring-gpg.desktop /etc/xdg/autostart/gnome-keyring-gpg.desktop.inactive
-    
-  mv /etc/xdg/autostart/gnome-keyring-ssh.desktop /etc/xdg/autostart/gnome-keyring-ssh.desktop.inactive
+  sed -e '$aX-GNOME-Autostart-enabled=false' -e '$aHidden=true' \
+      /etc/xdg/autostart/gnome-keyring-ssh.desktop > $HOME/.config/autostart/gnome-keyring-ssh.desktop
+
+On GNOME 3.16 or earlier, do the same for the broken gpg-agent implementation, which does not support smartcards:
+
+  sed -e '$aX-GNOME-Autostart-enabled=false' -e '$aHidden=true' \
+      /etc/xdg/autostart/gnome-keyring-gpg.desktop > $HOME/.config/autostart/gnome-keyring-gpg.desktop
 
 Next, place the following in ``~/.bashrc`` to ensure gpg-agent starts with ``--enable-ssh-support``
 ::
