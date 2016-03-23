@@ -49,8 +49,6 @@ Allow admin actions on your YubiKey (if your gnupg version is < 2.0.11)::
 
   $ echo "allow-admin" >>  ~/.gnupg/scdaemon.conf
 
-Then, comment out the ``use-ssh-agent`` line in ``/etc/X11/XSession.options`` file.
-
 
 Intercept gnome-keyring-daemon and put gpg-agent in place for ssh authentication (Ubuntu)
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -71,6 +69,8 @@ Add the following lines to the post-stop script section::
 
   initctl unset-env --global SSH_AUTH_SOCK
   initctl unset-env --global SSH_AGENT_PID
+
+Comment out the ``use-ssh-agent`` line in ``/etc/X11/XSession.options`` file.
 
 Disable the other system gpg-agent::
 
