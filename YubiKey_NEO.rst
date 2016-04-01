@@ -93,11 +93,11 @@ On GNOME 3.16 or earlier, do the same for the broken gpg-agent implementation, w
 Next, place the following in ``~/.bashrc`` to ensure gpg-agent starts with ``--enable-ssh-support``
 ::
 
-    if [ ! -f /run/user/($id -u)/gpg-agent.env ]; then
+    if [ ! -f /run/user/$(id -u)/gpg-agent.env ]; then
         killall gpg-agent;
-        eval $(gpg-agent --daemon --enable-ssh-support > /run/user/($id -u)/gpg-agent.env);
+        eval $(gpg-agent --daemon --enable-ssh-support > /run/user/$(id -u)/gpg-agent.env);
     fi
-    . /run/user/($id -u)/gpg-agent.env
+    . /run/user/$(id -u)/gpg-agent.env
 
 Now go to next step (Reload GNOME-Shell) :)
 
