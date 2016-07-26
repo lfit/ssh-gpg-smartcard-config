@@ -1,21 +1,26 @@
 #!/bin/bash
-GPGVERS=$(gpg2 --version |grep gpg|awk '{print $3}'|cut -d"." -f2 )
-if [ $GPGVERS -ge 1 ]; then
-  gpg-connect-agent /bye
-  export SSH_AUTH_SOCK=$HOME/.gnupg/S.gpg-agent.ssh
+GPG_CONNECT_AGENT=$(which gpg-connect-agent 2>/dev/null)
+if [ -x "$GPG_CONNECT_AGENT" ]; then
+
+    $GPG_CONNECT_AGENT /bye
+    export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/gnupg/S.gpg-agent.ssh
+    if [ ! -S $SSH_AUTH_SOCK ]; then
+        # older versions of gpg-connect-agent put it in $HOME/.gnupg
+        export SSH_AUTH_SOCK=$HOME/.gnupg/S.gpg-agent.ssh
+    fi
 else
+
   # Copyright (c) 2010 Diego E. Pettenò <flameeyes@gmail.com>
   # Available under CC-BY license (Attribution)
 
   if ! [ -f "${HOME}/.gpg-agent-info" ] ||
      ! pgrep -u ${USER} gpg-agent >/dev/null; then
-  	gpg-agent --daemon --enable-ssh-support --scdaemon-program /usr/libexec/scdaemon --use-standard-socket --log-file ~/.gnupg/gpg-agent.log --write-env-file
+     gpg-agent --daemon --enable-ssh-support --scdaemon-program /usr/libexec/scdaemon --use-standard-socket --log-file ~/.gnupg/gpg-agent.log --write-env-file
   fi
 
   # for ssh-agent forwarding, override gnome-keyring though!
   if [ -n ${SSH_AUTH_SOCK} ] && \
       [ ${SSH_AUTH_SOCK#/tmp/keyring-} = ${SSH_AUTH_SOCK} ]; then
-  
       fwd_SSH_AUTH_SOCK=${SSH_AUTH_SOCK}
   fi
 
