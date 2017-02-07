@@ -289,6 +289,37 @@ Assuming everything above is configured correctly, a simple test is performed wi
   $ ssh-add -L
   ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDL/XmU......BL0luE= cardno:00050000158A
 
+Caching your PIN
+----------------
+
+If you find that pinentry continues to ask for your PIN and you were expecting
+your PIN to be cached, you may need to toggle the "forcesig" flag on your YubiKey::
+
+ $ gpg2 --card-edit
+
+ gpg/card> admin
+ gpg/card> list
+ ...
+ Signature PIN ....: forced
+ ...
+
+ gpg/card> forcesig
+ gpg/card> list
+ ...
+ Signature PIN ....: not forced
+
+From https://dilfridge.blogspot.com.au/2013/05/openpgp-smartcards-and-gentoo-part-2.html:
+
+ "forcesig" toggles a flag inside the card that has been introduced because
+ of German legislative requirements for some smartcard applications. Normally,
+ once you have inserted the card into the reader, you enter the PIN once for
+ unlocking e.g. the encryption or the signature key, and then the key remains
+ open for the moment. If the signature PIN is "forced", you will have to
+ reenter the PIN again each time you want to make a signature.
+
+Thanks to `askb <https://github.com/askb>`_ for pointing out this flag to help
+solve a mutt + gpg + pin cache issue.
+
 FILES
 -----
 
