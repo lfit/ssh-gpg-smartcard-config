@@ -242,7 +242,7 @@ Assuming everything above is configured correctly, a simple test is performed wi
 Resetting the GPG SmartCard
 ---------------------------
 
-In some cases, it's going to be useful to rest the SmartCard. It can be done interactively::
+In some cases, it's going to be useful to reset the SmartCard. It can be done interactively::
 
   $ gpg-connect-agent
   > /hex
