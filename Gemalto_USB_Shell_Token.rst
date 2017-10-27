@@ -3,7 +3,7 @@ ssh-gpg-smartcard-config
 
 This document covers the procedure for configurating a system to use gpg smartcards for ssh authentication. The benefit is a good model for `two-factor authentication <http://en.wikipedia.org/wiki/Two-factor_authentication>`_, something you have and something you know. In this example, there is a token and a passphrase. 
 
-The `Gemalto USB Shell Token V2 <http://shop.kernelconcepts.de/product_info.php?cPath=1_26&products_id=119>`_ and the `OpenPGP SmartCard V2 <http://shop.kernelconcepts.de/product_info.php?products_id=42&osCsid=101f6f90ee89ad616d2eca1b31dff757>`_ are used here, though there are many combinations that will work.
+The `Gemalto USB Shell Token V2 <https://www.floss-shop.de/en/security-privacy/smartcard-reader/3/gemalto-shell-token-black?c=39>`_ and the `OpenPGP SmartCard V2 <https://www.floss-shop.de/en/security-privacy/smartcards/13/openpgp-smart-card-v2.1?c=40>`_ are used here, though there are many combinations that will work.
 
 Examples below are using a Fedora 17 x86_64 fresh install, there are other tutorials for other operating systems available online. See the CREDITS section below for alternate tutorials, examples, etc.
 
